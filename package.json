@@ -1,0 +1,23 @@
+{
+  "name": "handtalk-fullstack-challenge",
+  "version": "1.0.0",
+  "description": "Full-stack application for accessibility analysis of a given URL, with a detailed report and storage of previous submissions.",
+  "main": "commitlint.config.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lindembergtxr/handtalk-fullstack-challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lindembergtxr/handtalk-fullstack-challenge/issues"
+  },
+  "homepage": "https://github.com/lindembergtxr/handtalk-fullstack-challenge#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0"
+  }
+}
