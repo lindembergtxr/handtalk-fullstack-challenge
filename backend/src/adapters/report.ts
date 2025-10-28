@@ -1,12 +1,11 @@
-type Tag = 'html' | 'title'
-
+type Tag = 'html' | 'title' | 'img' | 'input'
 export interface ReportItem {
     testGroup: string
     testCase: string
     situation: 'success' | 'fail'
     code: string
     selector: Tag | null
-    description: string | null
+    description: string[]
 }
 
 export interface AccessibilityReport {

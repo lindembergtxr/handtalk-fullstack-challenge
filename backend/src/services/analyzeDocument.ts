@@ -1,5 +1,10 @@
 import { generateEmptyReport } from './report'
-import { generateLanguageReport, generateTitleReport } from './accessibility/index'
+import {
+    generateImgReport,
+    generateLabelReport,
+    generateLanguageReport,
+    generateTitleReport,
+} from './accessibility/index'
 
 export const analyzeDocument = (document: Document) => {
     const report = generateEmptyReport()
@@ -17,6 +22,16 @@ export const analyzeDocument = (document: Document) => {
 
     report.title = title
     report.report = [...report.report, ...titleReport]
+
+    // validate images
+    const { report: imageReport } = generateImgReport(document)
+
+    report.report = [...report.report, ...imageReport]
+
+    // validate label
+    const { report: labelReport } = generateLabelReport(document)
+
+    report.report = [...report.report, ...labelReport]
 
     return report
 }
