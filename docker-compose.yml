@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: handtalk-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASS}
+      MONGO_INITDB_DATABASE: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
