@@ -11,6 +11,8 @@ export const scrapeUrl = async (url: string) => {
         const document = dom.window.document
 
         const report = await analyzeDocument(document)
+        report.url = url
+        report.createdAt = new Date().toUTCString()
 
         return report
     } catch (error: unknown) {
