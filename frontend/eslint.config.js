@@ -14,16 +14,20 @@ export default [
         },
         rules: {},
     },
-    {
-        files: ['**/*.{ts,tsx,vue}'],
-        languageOptions: { parser: tsEslint.parser },
-    },
     ...pluginVue.configs['flat/essential'],
     {
         files: ['**/*.vue'],
         languageOptions: {
             parser: vueParser,
             parserOptions: { parser: tsEslint.parser },
+        },
+    },
+    {
+        files: ['**/*.{ts,tsx,vue}'],
+        languageOptions: { parser: tsEslint.parser },
+        parser: 'vue-eslint-parser',
+        rules: {
+            'vue/multi-word-component-names': 'off',
         },
     },
 ]
