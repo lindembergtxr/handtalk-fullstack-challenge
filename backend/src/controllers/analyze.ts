@@ -1,10 +1,16 @@
 import { Request, Response } from 'express'
 
+import { validateUrlBody } from '../utils/validateUrlBody'
+
 type ReceiveUrl = {
     url: string
 }
 export const receiveUrl = (req: Request<object, object, ReceiveUrl>, res: Response) => {
-    const { url } = req.body
+    const { valid, ...data } = validateUrlBody(req.body)
 
-    res.status(201).json({ message: `URL ${url} received!` })
+    if (!valid) return res.status(400).json({ status: 'error', ...data })
+
+    return res
+        .status(201)
+        .json({ status: 'success', message: `URL ${data.url} received!`, data: { output: '' } })
 }
