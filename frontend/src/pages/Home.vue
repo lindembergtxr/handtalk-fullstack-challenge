@@ -3,26 +3,36 @@ import { ref } from 'vue'
 
 import SpinnerIcon from '../assets/SpinnerIcon.vue'
 import { analyzeUrl } from '../services/analyzeUrl'
+import type { AccessibilityReport } from '../adapters/report'
+import ReportViewer from '../components/ReportViewer.vue'
 
 const loading = ref(false)
-
 const urlRef = ref('')
+const success = ref(false)
+const response = ref<AccessibilityReport | null>(null)
+const error = ref<unknown | null>(null)
 
-const handleClick = () => {
+const handleClick = async () => {
     loading.value = true
+    response.value = null
+    error.value = null
 
-    analyzeUrl(urlRef.value)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-        .finally(() => (loading.value = false))
+    try {
+        const res = await analyzeUrl(urlRef.value)
+
+        if (res.success) response.value = res.data
+        else error.value = res.error
+
+        success.value = res.success
+    } finally {
+        loading.value = false
+    }
 }
 </script>
 
 <template>
-    <main aria-labelledby="home-title">
-        <div
-            class="flex flex-col bg-[#C64F01] items-center justify-center w-screen h-screen gap-y-12"
-        >
+    <main aria-labelledby="home-title" class="flex flex-col min-h-screen">
+        <div class="flex flex-col bg-[#C64F01] items-center w-screen py-10 gap-y-12">
             <h1 id="home-title" class="text-gray-100 font-medium text-4xl">
                 Analisador de acessibilidade
             </h1>
@@ -51,6 +61,33 @@ const handleClick = () => {
                     <SpinnerIcon class="w-4 h-4" text-color="#000" v-if="loading" />
                     <span v-else>Analisar</span>
                 </button>
+            </div>
+        </div>
+
+        <div
+            class="flex bg-gray-100 w-full overflow-hidden px-20 flex-1"
+            v-if="!!response || !!error"
+        >
+            <report-viewer v-if="success && response" :report-document="response" />
+
+            <div class="flex flex-col py-6" v-if="!success && error">
+                <h3>
+                    <span class="font-semibold">[Request falhou]</span>
+                </h3>
+
+                <h3>
+                    <span class="font-semibold">Status:</span>
+                    {{ (error as any)?.status ?? 500 }}
+                </h3>
+
+                <div class="flex gap-2">
+                    <h4 class="font-semibold">Mensagem:</h4>
+                    <p>{{ (error as any).message?.message ?? '' }}</p>
+                </div>
+                <div class="flex gap-2" v-if="(error as any).message?.error?.details ?? ''">
+                    <h4 class="font-semibold">Detalhes::</h4>
+                    <p>{{ (error as any).message?.error?.details ?? '' }}</p>
+                </div>
             </div>
         </div>
     </main>
